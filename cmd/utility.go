@@ -21,20 +21,20 @@ type User struct {
 	Telephone string `json:"telephone"`
 }
 
-type Time struct {
-	Year  int `json:"Year"`
-	Mouth int `json:"Mouth"`
-	Day   int `json:"Day"`
-	Hour  int `json:"Hour"`
-	Min   int `json:"Min"`
-}
+// type Time struct {
+// 	Year  int `json:"Year"`
+// 	Mouth int `json:"Mouth"`
+// 	Day   int `json:"Day"`
+// 	Hour  int `json:"Hour"`
+// 	Min   int `json:"Min"`
+// }
 
 type Meeting struct {
-	Title         string   `json:"Title"`
-	Sponsors      string   `json:"Sponsors"`
-	Participators []string `json:"Participators"`
-	Start         Time     `json:"Start"`
-	End           Time     `json:"End"`
+	Title         string `json:"Title"`
+	Sponsors      string `json:"Sponsors"`
+	Participators string `json:"Participators"`
+	Start         string `json:"Start"`
+	End           string `json:"End"`
 }
 
 type UserList []User
@@ -46,6 +46,7 @@ type LogState struct {
 }
 
 var username, password, email, telephone string
+var title, sponsor, participators, start, end string
 
 func GetUsers(usersPtr *UserList) error {
 	return loadJSON(USER_JSON, usersPtr)
