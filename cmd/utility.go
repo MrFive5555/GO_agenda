@@ -48,6 +48,8 @@ type LogState struct {
 var username, password, email, telephone string
 var title, sponsor, participators, start, end string
 
+const layout string = "2006-01-02 15:04:05"
+
 func GetUsers(usersPtr *UserList) error {
 	return loadJSON(USER_JSON, usersPtr)
 }

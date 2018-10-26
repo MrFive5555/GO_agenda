@@ -14,7 +14,7 @@
 
 package main
 
-import "./cmd"
+import "github.com/gitgiter/agenda/cmd"
 
 func main() {
 	cmd.Execute()

@@ -62,8 +62,13 @@ var createMeetingCmd = &cobra.Command{
 		participatorsList := strings.Split(participators, ",")
 
 		// parse time to date
-		startTime, _ := time.Parse("2006-01-02 15:04:05", startFormat)
-		endTime, _ := time.Parse("2006-01-02 15:04:05", endFormat)
+		startTime, _ := time.Parse(layout, startFormat)
+		endTime, _ := time.Parse(layout, endFormat)
+
+		if startTime.After(endTime) || startTime.Equal(endTime) {
+			fmt.Println("[fail] start time must before end time")
+			return
+		}
 
 		// 检查是否重名
 		var meetings MeetingList
@@ -99,9 +104,9 @@ var createMeetingCmd = &cobra.Command{
 			for _, meeting := range meetings {
 				mStartFormat := timeFormation(meeting.Start)
 				mEndFormat := timeFormation(meeting.End)
-				mStart, _ := time.Parse("2006-01-02 15:04:05", mStartFormat)
-				mEnd, _ := time.Parse("2006-01-02 15:04:05", mEndFormat)
-				if !(mEnd.Before(startTime) || mStart.After(endTime)) {
+				mStart, _ := time.Parse(layout, mStartFormat)
+				mEnd, _ := time.Parse(layout, mEndFormat)
+				if !((mEnd.Before(startTime) || mEnd.Equal(startTime)) || (mStart.After(endTime) || mStart.Equal(endTime))) {
 					if meeting.Sponsors == participator {
 						fmt.Printf("[fail] participator %s is a busy sponsor in another meeting (%s)\n", participator, meeting.Title)
 						return
@@ -167,9 +172,9 @@ func isvalidParticipators(participators string) bool {
 
 func isvalidStart(start string) bool {
 	// handle time format error
-	_, err := time.Parse("2006-01-02 15:04:05", start)
+	_, err := time.Parse(layout, start)
 	if err != nil {
-		// fmt.Printf("[fail] invalid format of start time %s, should be like 2006-01-02 15:04:05\n", start)
+		// fmt.Printf("[fail] invalid format of start time %s, should be like 2006-01-02-15-04\n", start)
 		fmt.Printf("[fail] %s\n", err.Error())
 		return false
 	}
@@ -178,9 +183,9 @@ func isvalidStart(start string) bool {
 
 func isvalidEnd(end string) bool {
 	// handle time format error
-	_, err := time.Parse("2006-01-02 15:04:05", end)
+	_, err := time.Parse(layout, end)
 	if err != nil {
-		// fmt.Printf("[fail] invalid format of end time %s, should be like 2006-01-02 15:04:05\n", end)
+		// fmt.Printf("[fail] invalid format of end time %s, should be like 2006-01-02-15-04\n", end)
 		fmt.Printf("[fail] %s\n", err.Error())
 		return false
 	}
@@ -190,7 +195,7 @@ func isvalidEnd(end string) bool {
 func timeFormation(origin string) string {
 	test := strings.Split(origin, "-")
 	if len(test) != 5 {
-		fmt.Printf("[fail] invalid format of end time %s, should be like 2006-01-02 15:04:05\n", end)
+		fmt.Printf("[fail] invalid format of end time %s, should be like 2006-01-02-15-04\n", end)
 		return ""
 	}
 	return test[0] + "-" + test[1] + "-" + test[2] + " " + test[3] + ":" + test[4] + ":00"
