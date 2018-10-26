@@ -36,7 +36,7 @@ to agenda`,
 					var state LogState
 					GetLogState(&state)
 					if state.HasLogin {
-						fmt.Printf("[fail] account (%s) has been loged in\n", state.UserName)
+						fmt.Printf("[fail] account (%s) has been logged in\n", state.UserName)
 					} else {
 						state.UserName = username
 						state.HasLogin = true

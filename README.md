@@ -18,25 +18,25 @@ agenda [Command] [arg]
 **agenda showall**  
 已登录的用户查看已注册的所有用户的用户名、邮箱及电话信息。
 ## 用户删除
-**agenda deleteAcount**  
+**agenda deleteAccount**  
 已登录的用户可以删除本用户账户（即销号）。
 删除成功则退出系统登录状态。删除后,该用户账户不再存在。  
 用户账户删除以后：  
 以该用户为*发起者*的会议将被删除  
 以该用户为*参与者*的会议将从*参与者*列表中移除该用户。若因此造成会议*参与者*人数为0,则会议也将被删除。
 ## 创建会议
-**agenda creatMeeting -t title -p participators -s startTime -e endTime**  
+**agenda createMeeting -t title -p participators -s startTime -e endTime**  
 已登录的用户可以添加一个新会议到其议程安排中。会议可以在多个已注册用户间举行,不允许包含未注册用户。添加会议时提供的信息应包括：  
 会议主题(title)（在会议列表中具有唯一性）  
-会议参与者(participators),多个参与者以逗号分隔  
+会议参与者(participators),多个参与者以逗号分隔,逗号后不能有空格  
 会议起始时间(start time)  
 会议结束时间(end time)  
 时间格式为YYYY-MM-DD-HH-mm  
 如：
 ```bash
-agenda creatMeeting -t GO_lec_1 -p Tom,Mike,Shelly -s 2018-06-30-14:00 -e 2018-06-30-16:00
+agenda createMeeting -t GO_lec_1 -p Tom,Mike,Shelly -s 2018-06-30-14-00 -e 2018-06-30-16-00
 ```
-将创建一个主题为GO_lec_1的会议,会议成员有Tom, Mike, Shelly,从2018-06-30-14:00到2018-06-30-16:00的会议  
+将创建一个主题为GO_lec_1的会议,会议成员有Tom, Mike, Shelly,从2018-06-30-14-00到2018-06-30-16-00的会议  
 注意,任何用户都无法分身参加多个会议。如果用户已有的会议安排（作为发起者或参与者）与将要创建的会议在时间上重叠 （允许仅有端点重叠的情况）,则无法创建该会议。  
 ## 增删会议参与者
 **agenda addParticipator -t title -p participators**  

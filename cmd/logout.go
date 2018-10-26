@@ -31,7 +31,7 @@ register when you aren't log in
 		var state LogState
 		GetLogState(&state)
 		if state.HasLogin {
-			fmt.Printf("[success] account (%s) has been loged out\n", state.UserName)
+			fmt.Printf("[success] account (%s) has been logged out\n", state.UserName)
 			state.UserName = ""
 			state.HasLogin = false
 			SetLogState(&state)

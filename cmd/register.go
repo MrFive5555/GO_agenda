@@ -31,10 +31,10 @@ you should specify the username, password, email and telephone
 		// 检查非法参数
 		validArgs := true
 		infos := []string{"username", "password", "email", "telephone"}
-		register_args := []string{username, password, email, telephone}
-		isvalid := []func(string) bool{isvalid_username, isvalid_password, isvalid_email, isvalid_telephone}
+		registerArgs := []string{username, password, email, telephone}
+		isvalid := []func(string) bool{isvalidUsername, isvalidPassword, isvalidEmail, isvalidTelephone}
 		for i, info := range infos {
-			if !isvalid[i](register_args[i]) {
+			if !isvalid[i](registerArgs[i]) {
 				validArgs = false
 				fmt.Printf("[fail] the Field %s is invalid\n", info)
 			}
@@ -59,7 +59,7 @@ you should specify the username, password, email and telephone
 			telephone,
 		})
 		SetUsers(&users)
-		fmt.Printf("[sucess] new account %s has been added\n", username)
+		fmt.Printf("[success] new account %s has been added\n", username)
 	},
 }
 
@@ -72,15 +72,15 @@ func init() {
 	registerCmd.Flags().StringVarP(&telephone, "telephone", "t", "", "the telephone of new account")
 }
 
-func isvalid_username(username string) bool {
+func isvalidUsername(username string) bool {
 	return username != ""
 }
-func isvalid_password(password string) bool {
+func isvalidPassword(password string) bool {
 	return password != ""
 }
-func isvalid_email(email string) bool {
+func isvalidEmail(email string) bool {
 	return email != ""
 }
-func isvalid_telephone(telephone string) bool {
+func isvalidTelephone(telephone string) bool {
 	return telephone != ""
 }
