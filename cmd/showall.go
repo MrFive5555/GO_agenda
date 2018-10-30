@@ -16,6 +16,8 @@ package cmd
 
 import (
 	"fmt"
+	"strconv"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -26,17 +28,30 @@ var showallCmd = &cobra.Command{
 	Short: "show all the users",
 	Long:  `show all the users who have registered before in agenda`,
 	Run: func(cmd *cobra.Command, args []string) {
+
+		debugLog("[command] showall " + strings.Join(args, " "))
+
+		// other argument
+		if len(args) > 0 {
+			fmt.Println("too many arguments")
+			debugLog("too many arguments")
+			return
+		}
+
 		var users UserList
 		GetUsers(&users)
 
 		if len(users) <= 0 {
-			fmt.Println("There is no user in agenda, please register first")
+			fmt.Println("[success] There is no user in agenda, please register first")
+			debugLog("[success] There is no user in agenda, please register first")
 			return
 		}
 		for key, user := range users {
 			fmt.Printf("[user %d]\n\tname:\t%s\n\temail:\t%s\n\ttel:\t%s\n", key+1, user.UserName, user.Email, user.Telephone)
 		}
 		fmt.Printf("[success] Done! A total of %d users have been shown\n", len(users))
+		debugLog("[success] Done! A total of " + strconv.Itoa(len(users)) + " users have been shown")
+
 	},
 }
 
