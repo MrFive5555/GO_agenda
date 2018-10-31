@@ -30,9 +30,21 @@ var createMeetingCmd = &cobra.Command{
 	you should specify the title, participators(separated by commas, no space after commas), start time and end time`,
 	Run: func(cmd *cobra.Command, args []string) {
 
+		debugLog("[command] createMeeting -t " + title + " -p " + participators + " -s " + start + " -e " + end + " " + strings.Join(args, " "))
+
 		// other argument
 		if len(args) > 0 {
 			fmt.Println("too many arguments")
+			debugLog("too many arguments")
+			return
+		}
+
+		var state LogState
+		GetLogState(&state)
+
+		if state.HasLogin == false {
+			fmt.Println("[fail] you haven't logged in any account")
+			debugLog("[fail] you haven't logged in any account")
 			return
 		}
 
@@ -52,6 +64,7 @@ var createMeetingCmd = &cobra.Command{
 			if !isvalid[i](registerArgs[i]) {
 				validArgs = false
 				fmt.Printf("[fail] the Field %s is invalid\n", info)
+				debugLog("[fail] the Field " + info + " is invalid")
 			}
 		}
 		if !validArgs {
@@ -67,6 +80,7 @@ var createMeetingCmd = &cobra.Command{
 
 		if startTime.After(endTime) || startTime.Equal(endTime) {
 			fmt.Println("[fail] start time must before end time")
+			debugLog("[fail] start time must before end time")
 			return
 		}
 
@@ -76,6 +90,7 @@ var createMeetingCmd = &cobra.Command{
 		for _, meeting := range meetings {
 			if meeting.Title == title {
 				fmt.Printf("[fail] there has been a meeting with the same title %s\n", title)
+				debugLog("[fail] there has been a meeting with the same title " + title)
 				return
 			}
 		}
@@ -93,6 +108,7 @@ var createMeetingCmd = &cobra.Command{
 			}
 			if !exist {
 				fmt.Printf("[fail] participator %s does not exist\n", participator)
+				debugLog("[fail] participator " + participator + " does not exist")
 				return
 			}
 		}
@@ -109,12 +125,14 @@ var createMeetingCmd = &cobra.Command{
 				if !((mEnd.Before(startTime) || mEnd.Equal(startTime)) || (mStart.After(endTime) || mStart.Equal(endTime))) {
 					if meeting.Sponsors == participator {
 						fmt.Printf("[fail] participator %s is a busy sponsor in another meeting (%s)\n", participator, meeting.Title)
+						debugLog("[fail] participator " + participator + " is a busy sponsor in another meeting (" + meeting.Title + ")")
 						return
 					}
 					mParticipatorsList := strings.Split(meeting.Participators, ",")
 					for _, mParticipator := range mParticipatorsList {
 						if mParticipator == participator {
 							fmt.Printf("[fail] participator %s is a busy participator in another meeting (%s)\n", participator, meeting.Title)
+							debugLog("[fail] participator " + participator + " is a busy participator in another meeting (" + meeting.Title + ")")
 							return
 						}
 					}
@@ -122,8 +140,6 @@ var createMeetingCmd = &cobra.Command{
 			}
 		}
 
-		var state LogState
-		GetLogState(&state)
 		meetings = append(meetings, Meeting{
 			title,
 			state.UserName,
@@ -133,6 +149,8 @@ var createMeetingCmd = &cobra.Command{
 		})
 		SetMeeting(&meetings)
 		fmt.Printf("[success] new meeting %s has been added\n", title)
+		debugLog("[success] new meeting " + title + " has been added")
+
 	},
 }
 
@@ -164,6 +182,7 @@ func isvalidParticipators(participators string) bool {
 	for i := 0; i < len(participators); i++ {
 		if participators[i] == ' ' {
 			fmt.Printf("[fail] %s contains space, no space is expected\n", participators)
+			debugLog("[fail] " + participators + " contains space, no space is expected\n")
 			return false
 		}
 	}
@@ -176,6 +195,7 @@ func isvalidStart(start string) bool {
 	if err != nil {
 		// fmt.Printf("[fail] invalid format of start time %s, should be like 2006-01-02-15-04\n", start)
 		fmt.Printf("[fail] %s\n", err.Error())
+		debugLog("[fail] " + err.Error())
 		return false
 	}
 	return true
@@ -187,6 +207,7 @@ func isvalidEnd(end string) bool {
 	if err != nil {
 		// fmt.Printf("[fail] invalid format of end time %s, should be like 2006-01-02-15-04\n", end)
 		fmt.Printf("[fail] %s\n", err.Error())
+		debugLog("[fail] " + err.Error())
 		return false
 	}
 	return true
@@ -196,6 +217,7 @@ func timeFormation(origin string) string {
 	test := strings.Split(origin, "-")
 	if len(test) != 5 {
 		fmt.Printf("[fail] invalid format of end time %s, should be like 2006-01-02-15-04\n", end)
+		debugLog("[fail] invalid format of end time " + end + ", should be like 2006-01-02-15-04")
 		return ""
 	}
 	return test[0] + "-" + test[1] + "-" + test[2] + " " + test[3] + ":" + test[4] + ":00"
