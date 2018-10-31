@@ -3,7 +3,9 @@ package cmd
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 )
 
@@ -47,6 +49,7 @@ type LogState struct {
 
 var username, password, email, telephone string
 var title, sponsor, participators, start, end string
+var quitTitle string
 
 const layout string = "2006-01-02 15:04:05"
 
@@ -91,7 +94,31 @@ func saveJSON(file string, dataPtr interface{}) error {
 	}
 	return nil
 }
+func debugLog(str string) error {
+	logfile, err := os.OpenFile("./log.txt", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0777)
+	if err != nil {
+		fmt.Println(err.Error())
+		return err
+	}
 
+	debugLog := log.New(logfile, "[debug]", log.LstdFlags)
+	debugLog.Println(str)
+	return nil
+}
+func deleteMeeting(toRemove []bool) {
+	var meetings MeetingList
+	GetMeeting(&meetings)
+	var newMeetings MeetingList
+	for i := 0; i < len(meetings); i++ {
+		if toRemove[i] {
+			fmt.Printf("[success] delete meeting %s\n", meetings[i].Title)
+			debugLog("[success] delete meeting " + meetings[i].Title)
+		} else {
+			newMeetings = append(newMeetings, meetings[i])
+		}
+	}
+	SetMeeting(&newMeetings)
+}
 func init() {
 	os.Mkdir(CACHE_DIR, 0775)
 	checkCache := func(name string, default_context string) {

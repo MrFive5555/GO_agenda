@@ -21,16 +21,14 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// deleteAccountCmd represents the deleteAccount command
-var deleteAccountCmd = &cobra.Command{
-	Use:   "deleteAccount",
-	Short: "delete current account",
-	Long: `delete the current accout, 
-	and this account will be removed from all meetings that it participates,
-	and all the meetings that are sponsored by this account will be deleted    `,
+// quitCmd represents the quit command
+var quitCmd = &cobra.Command{
+	Use:   "quit",
+	Short: "quit a meeting",
+	Long:  `quit a meeting by specifying its title with -t`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		debugLog("[command] deleteAccount " + strings.Join(args, " "))
+		debugLog("[command] quit " + strings.Join(args, " "))
 
 		// other argument
 		if len(args) > 0 {
@@ -38,9 +36,6 @@ var deleteAccountCmd = &cobra.Command{
 			debugLog("too many arguments")
 			return
 		}
-
-		var users UserList
-		GetUsers(&users)
 
 		var state LogState
 		GetLogState(&state)
@@ -51,23 +46,6 @@ var deleteAccountCmd = &cobra.Command{
 			return
 		}
 
-		// 已登录的用户可以删除本用户账户（即销号）
-		var newUsers UserList
-		for _, user := range users {
-			if user.UserName == state.UserName {
-				continue
-			}
-			newUsers = append(newUsers, User{
-				user.UserName,
-				user.Password,
-				user.Email,
-				user.Telephone,
-			})
-		}
-		SetUsers(&newUsers)
-
-		// 用户账户删除以后：
-		// 以该用户为 发起者 的会议将被删除
 		// 以该用户为 参与者 的会议将从 参与者 列表中移除该用户
 		// 若因此造成会议 参与者 人数为0，则会议也将被删除。
 		var meetings MeetingList
@@ -75,10 +53,6 @@ var deleteAccountCmd = &cobra.Command{
 
 		toRemove := make([]bool, len(meetings))
 		for index, meeting := range meetings {
-			if state.UserName == meeting.Sponsors {
-				// delete meeting
-				toRemove[index] = true
-			}
 			participatorsList := strings.Split(meeting.Participators, ",")
 			for _, participator := range participatorsList {
 				if state.UserName == participator {
@@ -106,27 +80,24 @@ var deleteAccountCmd = &cobra.Command{
 
 		deleteMeeting(toRemove)
 
-		fmt.Println("[success] account deleted successfully")
-		debugLog("[success] account deleted successfully")
-
-		// 删除成功则退出系统登录状态。删除后，该用户账户不再存在。
-		state.UserName = ""
-		state.HasLogin = false
-		SetLogState(&state)
+		fmt.Println("[success] quit meeting successfully")
+		debugLog("[success] quit meeting successfully")
 
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(deleteAccountCmd)
+	rootCmd.AddCommand(quitCmd)
+
+	quitCmd.Flags().StringVarP(&quitTitle, "title", "t", "", "the title of meeting to quit")
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// deleteAccountCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// quitCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// deleteAccountCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// quitCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
