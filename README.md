@@ -14,6 +14,9 @@ agenda [Command] [arg]
 ## 用户登出
 **agenda logout**  
 已登录的用户登出系统后,只能使用用户注册和用户登录功能。
+## 用户状态
+**agenda status**
+查看用户是否已登录
 ## 用户查询
 **agenda showall**  
 已登录的用户查看已注册的所有用户的用户名、邮箱及电话信息。
