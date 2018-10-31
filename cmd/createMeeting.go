@@ -195,7 +195,7 @@ func isvalidEnd(end string) bool {
 func timeFormation(origin string) string {
 	test := strings.Split(origin, "-")
 	if len(test) != 5 {
-		fmt.Printf("[fail] invalid format of end time %s, should be like 2006-01-02-15-04\n", end)
+		fmt.Printf("[fail] invalid format of time %s, should be like 2006-01-02-15-04\n", end)
 		return ""
 	}
 	return test[0] + "-" + test[1] + "-" + test[2] + " " + test[3] + ":" + test[4] + ":00"
