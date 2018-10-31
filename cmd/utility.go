@@ -94,17 +94,7 @@ func saveJSON(file string, dataPtr interface{}) error {
 	}
 	return nil
 }
-func debugLog(str string) error {
-	logfile, err := os.OpenFile("./log.txt", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0777)
-	if err != nil {
-		fmt.Println(err.Error())
-		return err
-	}
 
-	debugLog := log.New(logfile, "[debug]", log.LstdFlags)
-	debugLog.Println(str)
-	return nil
-}
 func deleteMeeting(toRemove []bool) {
 	var meetings MeetingList
 	GetMeeting(&meetings)
@@ -119,6 +109,9 @@ func deleteMeeting(toRemove []bool) {
 	}
 	SetMeeting(&newMeetings)
 }
+
+var debugLog func(format string, arg ...interface{})
+
 func init() {
 	os.Mkdir(CACHE_DIR, 0775)
 	checkCache := func(name string, default_context string) {
@@ -130,4 +123,18 @@ func init() {
 	checkCache(USER_JSON, "{}")
 	checkCache(MEETING_JSON, "{}")
 	checkCache(LOG_JSON, `{"HasLogin":false,"UserName":""}`)
+
+	debugLog = (func() func(string, ...interface{}) {
+		logfile, err := os.OpenFile("./log.txt", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0777)
+		if err != nil {
+			fmt.Println(err.Error())
+			os.Exit(3)
+		}
+		debugLogger := log.New(logfile, "[debug]", log.LstdFlags)
+
+		return func(format string, arg ...interface{}) {
+			str := fmt.Sprintf(format, arg...)
+			debugLogger.Println(str)
+		}
+	})()
 }
