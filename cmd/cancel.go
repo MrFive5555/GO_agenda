@@ -23,19 +23,15 @@ import (
 // cancelCmd represents the cancel command
 var cancelCmd = &cobra.Command{
 	Use:   "cancel",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-	and usage of using your command. For example:
-
-	Cobra is a CLI library for Go that empowers applications.
-	This application is a tool to generate the needed files
-	to quickly create a Cobra application.`,
+	Short: "cancel a meeting of your own",
+	Long: `specify the title and you will cancel the meeting you sponsor`,
 
 	Run: func(cmd *cobra.Command, args []string) {
 
 		// 检查非法参数
 		if !isvalidTitle(title) {
 			fmt.Printf("[fail] the Field title is invalid\n")
+			debugLog("[fail] the Field title is invalid")
 			return
 		}
 
@@ -47,26 +43,28 @@ var cancelCmd = &cobra.Command{
 			me = state.UserName
 		} else {
 			fmt.Printf("[fail] you haven't loged in\n")
+			debugLog("[fail] you haven't logged in")
 			return 
 		}
 
 		// 检查自己发起的主题为title的会议是否存在，并获取该会议信息
 		var meetings MeetingList
 		GetMeeting(&meetings)
-		var myMeeting Meeting
+		toRemove := make([]bool, len(meetings))
 		validMeeting := false
-		for _, m := range meetings {
+		for i, m := range meetings {
 			if (m.Title == title) && (m.Sponsors == me) {
 				validMeeting = true
-				myMeeting = m
+				toRemove[i] = true
 				break
 			}
 		}
 		if !validMeeting {
 			fmt.Printf("[fail] %s does not have sponsored the meeting %s\n", me, title)
+			debugLog("[fail] " + me + " does not have sponsored the meeting " + title)
 			return
 		}
-
+		deleteMeeting(toRemove)
 		
 	},
 }

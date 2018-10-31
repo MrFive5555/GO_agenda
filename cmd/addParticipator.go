@@ -25,13 +25,9 @@ import (
 // addParticipatorCmd represents the addParticipator command
 var addParticipatorCmd = &cobra.Command{
 	Use:   "addParticipator",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-	and usage of using your command. For example:
-
-	Cobra is a CLI library for Go that empowers applications.
-	This application is a tool to generate the needed files
-	to quickly create a Cobra application.`,
+	Short: "add some participators to one of your meeting",
+	Long: `To add some participators to one of your meeting,
+you should specify the title and the new participators `,
 	Run: func(cmd *cobra.Command, args []string) {
 		// fmt.Println("addParticipator called")
 
@@ -44,6 +40,7 @@ var addParticipatorCmd = &cobra.Command{
 			if !isvalid[i](registerArgs[i]) {
 				validArgs = false
 				fmt.Printf("[fail] the Field %s is invalid\n", info)
+				debugLog("[fail] the Field " + info +" is invalid")
 			}
 		}
 		if !validArgs {
@@ -58,6 +55,7 @@ var addParticipatorCmd = &cobra.Command{
 			me = state.UserName
 		} else {
 			fmt.Printf("[fail] you haven't loged in\n")
+			debugLog("[fail] you haven't logged in")
 			return 
 		}
 
@@ -75,6 +73,7 @@ var addParticipatorCmd = &cobra.Command{
 		}
 		if !validMeeting {
 			fmt.Printf("[fail] %s does not have sponsored the meeting %s\n", me, title)
+			debugLog("[fail] " + me + " does not have sponsored the meeting " + title)
 			return
 		}
 
@@ -92,6 +91,7 @@ var addParticipatorCmd = &cobra.Command{
 			}
 			if !validParticipator {
 				fmt.Printf("[fail] participator %s does not exist\n", p)
+				debugLog("[fail] participator " + p + " does not exist")
 				return
 			}
 		}
@@ -113,12 +113,14 @@ var addParticipatorCmd = &cobra.Command{
 				if !((mEnd.Before(startTime) || mEnd.Equal(startTime)) || (mStart.After(endTime) || mStart.Equal(endTime))) {
 					if meeting.Sponsors == participator {
 						fmt.Printf("[fail] participator %s is a busy sponsor in another meeting (%s)\n", participator, meeting.Title)
+						debugLog("[fail] participator " + participator + " is a busy sponsor in another meeting (" + meeting.Title +")")
 						return
 					}
 					mParticipatorsList := strings.Split(meeting.Participators, ",")
 					for _, mParticipator := range mParticipatorsList {
 						if mParticipator == participator {
 							fmt.Printf("[fail] participator %s is a busy participator in another meeting (%s)\n", participator, meeting.Title)
+							debugLog("[fail] participator " + participator + " is a busy participator in another meeting (" + meeting.Title +")")
 							return
 						}
 					}
@@ -136,7 +138,7 @@ var addParticipatorCmd = &cobra.Command{
 		}
 		SetMeeting(&meetings)
 		fmt.Printf("[success] new participator(s) %s has(have) been added into the %s\n", participators, title)
-
+		debugLog("[success] new participator(s) " + participators + " has(have) been added into the " + title)
 	},
 }
 

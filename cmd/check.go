@@ -25,13 +25,9 @@ import (
 // checkCmd represents the check command
 var checkCmd = &cobra.Command{
 	Use:   "check",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-	and usage of using your command. For example:
-
-	Cobra is a CLI library for Go that empowers applications.
-	This application is a tool to generate the needed files
-	to quickly create a Cobra application.`,
+	Short: "check meetings that you participate in",
+	Long: `you can check all meetings that you participate in, 
+or just check those in a period if specify the start_time and the end_time`,
 	Run: func(cmd *cobra.Command, args []string) {
 	
 		// 检查参数
@@ -51,6 +47,7 @@ var checkCmd = &cobra.Command{
 			if !isvalid[i](registerArgs[i]) {
 				validArgs = false
 				fmt.Printf("[fail] the Field %s is invalid\n", info)
+				debugLog("[fail] the Field " + info +" is invalid")
 			}
 		}
 		if !validArgs {
@@ -65,6 +62,7 @@ var checkCmd = &cobra.Command{
 			me = state.UserName
 		} else {
 			fmt.Printf("[fail] you haven't loged in\n")
+			debugLog("[fail] you haven't logged in")
 			return 
 		}
 
@@ -95,8 +93,7 @@ var checkCmd = &cobra.Command{
 			fmt.Printf("[meeting %d]\n\ttitle:\t%s\n\tsponsor:\t%s\n\tparticipators:\t%s\n\tstart_time:\t%s\n\tend_time:\t%s\n", key+1, meeting.Title, meeting.Sponsors, meeting.Participators, meeting.Start, meeting.End)
 		}
 		fmt.Printf("[success] Done! A total of %d meetings have been shown\n", len(myMeetings))
-		fmt.Printf("start : %s , end : %s\n", startTime, endTime)
-		
+		debugLog("[success] Meetings have been shown")
 	},
 }
 
