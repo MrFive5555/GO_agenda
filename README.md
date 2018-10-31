@@ -1,4 +1,5 @@
 # Agenda
+![](https://travis-ci.com/MrFive5555/GO_agenda.svg?branch=master)  
 Agenda是一个用于会议管理的命令行工具,每个用户都拥有一个自己的帐号
 # 命令格式
 ```bash
