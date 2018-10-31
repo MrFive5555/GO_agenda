@@ -16,6 +16,7 @@ package cmd
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -28,6 +29,8 @@ var registerCmd = &cobra.Command{
 you should specify the username, password, email and telephone
 `,
 	Run: func(cmd *cobra.Command, args []string) {
+		debugLog("[command] register -u %s -p ***** -e %s -t %s "+strings.Join(args, " "), username, email, telephone)
+
 		// 检查非法参数
 		validArgs := true
 		infos := []string{"username", "password", "email", "telephone"}
@@ -37,6 +40,7 @@ you should specify the username, password, email and telephone
 			if !isvalid[i](registerArgs[i]) {
 				validArgs = false
 				fmt.Printf("[fail] the Field %s is invalid\n", info)
+				debugLog("[fail] the Field %s is invalid\n", info)
 			}
 		}
 		if !validArgs {
@@ -49,6 +53,7 @@ you should specify the username, password, email and telephone
 		for _, user := range users {
 			if user.UserName == username {
 				fmt.Printf("[fail] there has been account named %s\n", username)
+				debugLog("[fail] there has been account named %s\n", username)
 				return
 			}
 		}
@@ -60,6 +65,7 @@ you should specify the username, password, email and telephone
 		})
 		SetUsers(&users)
 		fmt.Printf("[success] new account %s has been added\n", username)
+		debugLog("[success] new account %s has been added\n", username)
 	},
 }
 

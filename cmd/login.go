@@ -16,6 +16,7 @@ package cmd
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -27,6 +28,8 @@ var loginCmd = &cobra.Command{
 	Long: `use your username and password to log in
 to agenda`,
 	Run: func(cmd *cobra.Command, args []string) {
+		debugLog("[command] login -u %s -p ****** "+strings.Join(args, " "), username)
+
 		var users UserList
 		GetUsers(&users)
 
@@ -37,19 +40,26 @@ to agenda`,
 					GetLogState(&state)
 					if state.HasLogin {
 						fmt.Printf("[fail] account (%s) has been logged in\n", state.UserName)
+						debugLog("[fail] account (%s) has been logged in\n", state.UserName)
 					} else {
 						state.UserName = username
 						state.HasLogin = true
 						SetLogState(&state)
 						fmt.Printf("[success] Log in account (%s)\n", username)
+						debugLog("[success] Log in account (%s)\n", username)
 					}
 				} else {
 					fmt.Printf("[fail] (%s) password uncorrect\n", username)
+					debugLog("[fail] (%s) password uncorrect\n", username)
 				}
 				return
 			}
 		}
 		fmt.Printf(`[fail] there is not account (%s). you can use 
+"agenda register -u %s -p [password] -e [email] -t [telephone]"
+to register it
+`, username, username)
+		debugLog(`[fail] there is not account (%s). you can use 
 "agenda register -u %s -p [password] -e [email] -t [telephone]"
 to register it
 `, username, username)

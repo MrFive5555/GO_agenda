@@ -16,6 +16,7 @@ package cmd
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -28,6 +29,8 @@ var logoutCmd = &cobra.Command{
 register when you aren't log in
 `,
 	Run: func(cmd *cobra.Command, args []string) {
+		debugLog("[command] logout " + strings.Join(args, " "))
+
 		var state LogState
 		GetLogState(&state)
 		if state.HasLogin {
