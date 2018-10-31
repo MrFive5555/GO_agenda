@@ -51,8 +51,13 @@ var quitCmd = &cobra.Command{
 		var meetings MeetingList
 		GetMeeting(&meetings)
 
+		isQuit := false
 		toRemove := make([]bool, len(meetings))
 		for index, meeting := range meetings {
+			if meeting.Title != title {
+				continue
+			}
+			isQuit = true
 			participatorsList := strings.Split(meeting.Participators, ",")
 			for _, participator := range participatorsList {
 				if state.UserName == participator {
@@ -80,8 +85,13 @@ var quitCmd = &cobra.Command{
 
 		deleteMeeting(toRemove)
 
-		fmt.Println("[success] quit meeting successfully")
-		debugLog("[success] quit meeting successfully")
+		if isQuit {
+			fmt.Println("[success] quit meeting successfully")
+			debugLog("[success] quit meeting successfully")
+		} else {
+			fmt.Println("[fail] no such meeting ")
+			debugLog("[fail] no such successfully")
+		}
 
 	},
 }

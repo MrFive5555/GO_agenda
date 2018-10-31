@@ -40,6 +40,7 @@ agenda createMeeting -t GO_lec_1 -p Tom,Mike,Shelly -s 2018-06-30-14-00 -e 2018-
 注意,任何用户都无法分身参加多个会议。如果用户已有的会议安排（作为发起者或参与者）与将要创建的会议在时间上重叠 （允许仅有端点重叠的情况）,则无法创建该会议。  
 ## 增删会议参与者
 **agenda addParticipator -t title -p participators**  
+**agenda removeParticipator -t title -p participators**  
 会议主题(title)（在会议列表中具有唯一性）  
 会议参与者(participators),
 已登录的用户可以向自己发起的主题为**title**的会议增加/删除*参与者*（**participators**多个参与者以逗号分隔）。  
