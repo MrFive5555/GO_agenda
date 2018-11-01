@@ -142,11 +142,11 @@ var createMeetingCmd = &cobra.Command{
 		}
 
 		meetings = append(meetings, entity.Meeting{
-			title,
-			state.UserName,
-			participators,
-			start,
-			end,
+			Title:         title,
+			Sponsors:      state.UserName,
+			Participators: participators,
+			Start:         start,
+			End:           end,
 		})
 		entity.SetMeeting(&meetings)
 		fmt.Printf("[success] new meeting %s has been added\n", title)

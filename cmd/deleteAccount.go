@@ -59,10 +59,10 @@ var deleteAccountCmd = &cobra.Command{
 				continue
 			}
 			newUsers = append(newUsers, entity.User{
-				user.UserName,
-				user.Password,
-				user.Email,
-				user.Telephone,
+				UserName:  user.UserName,
+				Password:  user.Password,
+				Email:     user.Email,
+				Telephone: user.Telephone,
 			})
 		}
 		entity.SetUsers(&newUsers)

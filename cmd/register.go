@@ -59,10 +59,10 @@ you should specify the username, password, email and telephone
 			}
 		}
 		users = append(users, entity.User{
-			username,
-			password,
-			email,
-			telephone,
+			UserName:  username,
+			Password:  password,
+			Email:     email,
+			Telephone: telephone,
 		})
 		entity.SetUsers(&users)
 		fmt.Printf("[success] new account %s has been added\n", username)
