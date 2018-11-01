@@ -16,7 +16,6 @@ package cmd
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/MrFive5555/GO_agenda/entity"
 	"github.com/spf13/cobra"
@@ -29,7 +28,7 @@ var clearMeetingCmd = &cobra.Command{
 	Long:  `clear all the meetings that you have created before`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		debugLog("[command] clearMeeting " + strings.Join(args, " "))
+		debugLog("[command] clearMeeting")
 
 		// other argument
 		if len(args) > 0 {
@@ -65,10 +64,10 @@ var clearMeetingCmd = &cobra.Command{
 
 		if flag {
 			fmt.Printf("[success] delete all the meetings sponsored by %s\n", state.UserName)
-			debugLog("[success] delete all the meetings sponsored by " + state.UserName)
+			debugLog("[success] delete all the meetings sponsored by %s\n", state.UserName)
 		} else {
 			fmt.Printf("[fail] no meeting is sponsored by %s\n", state.UserName)
-			debugLog("[fail] no meeting is sponsored by " + state.UserName)
+			debugLog("[fail] no meeting is sponsored by %s\n", state.UserName)
 		}
 
 	},

@@ -16,7 +16,6 @@ package cmd
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/MrFive5555/GO_agenda/entity"
 	"github.com/spf13/cobra"
@@ -30,7 +29,7 @@ var registerCmd = &cobra.Command{
 you should specify the username, password, email and telephone
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		debugLog("[command] register -u %s -p ***** -e %s -t %s "+strings.Join(args, " "), username, email, telephone)
+		debugLog("[command] register -u %s -p ***** -e %s -t %s ", username, email, telephone)
 
 		// 检查非法参数
 		validArgs := true

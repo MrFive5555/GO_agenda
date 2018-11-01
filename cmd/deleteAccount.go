@@ -31,7 +31,7 @@ var deleteAccountCmd = &cobra.Command{
 	and all the meetings that are sponsored by this account will be deleted    `,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		debugLog("[command] deleteAccount " + strings.Join(args, " "))
+		debugLog("[command] deleteAccount")
 
 		// other argument
 		if len(args) > 0 {
@@ -99,7 +99,7 @@ var deleteAccountCmd = &cobra.Command{
 						meetings[index].Participators = newParticipators[1:]
 						entity.SetMeeting(&meetings)
 						fmt.Printf("[success] delete participator %s from meeting %s\n", state.UserName, meeting.Title)
-						debugLog("[success] delete participator " + state.UserName + " from meeting " + meeting.Title)
+						debugLog("[success] delete participator %s from meeting %s\n", state.UserName, meeting.Title)
 					}
 				}
 			}

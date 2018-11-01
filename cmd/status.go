@@ -16,7 +16,6 @@ package cmd
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/MrFive5555/GO_agenda/entity"
 	"github.com/spf13/cobra"
@@ -29,8 +28,6 @@ var statusCmd = &cobra.Command{
 	Long: `check the status of account, 
 namely whether the account has logged in`,
 	Run: func(cmd *cobra.Command, args []string) {
-		debugLog("[command] status " + strings.Join(args, " "))
-
 		var state entity.LogState
 		entity.GetLogState(&state)
 

@@ -16,7 +16,6 @@ package cmd
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/MrFive5555/GO_agenda/entity"
 	"github.com/spf13/cobra"
@@ -29,7 +28,7 @@ var loginCmd = &cobra.Command{
 	Long: `use your username and password to log in
 to agenda`,
 	Run: func(cmd *cobra.Command, args []string) {
-		debugLog("[command] login -u %s -p ****** "+strings.Join(args, " "), username)
+		debugLog("[command] login -u %s -p ****** ", username)
 
 		var users entity.UserList
 		entity.GetUsers(&users)

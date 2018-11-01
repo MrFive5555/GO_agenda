@@ -62,7 +62,7 @@ var cancelCmd = &cobra.Command{
 		}
 		if !validMeeting {
 			fmt.Printf("[fail] %s does not have sponsored the meeting %s\n", me, title)
-			debugLog("[fail] " + me + " does not have sponsored the meeting " + title)
+			debugLog("[fail] %s does not have sponsored the meeting %s\n", me, title)
 			return
 		}
 		deleteMeeting(toRemove)

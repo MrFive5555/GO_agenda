@@ -13,7 +13,7 @@ func deleteMeeting(toRemove []bool) {
 	for i := 0; i < len(meetings); i++ {
 		if toRemove[i] {
 			fmt.Printf("[success] delete meeting %s\n", meetings[i].Title)
-			debugLog("[success] delete meeting " + meetings[i].Title)
+			debugLog("[success] delete meeting %s\n", meetings[i].Title)
 		} else {
 			newMeetings = append(newMeetings, meetings[i])
 		}

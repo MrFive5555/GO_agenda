@@ -16,7 +16,6 @@ package cmd
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/MrFive5555/GO_agenda/entity"
 	"github.com/spf13/cobra"
@@ -30,7 +29,7 @@ var logoutCmd = &cobra.Command{
 register when you aren't log in
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		debugLog("[command] logout " + strings.Join(args, " "))
+		debugLog("[command] logout ")
 
 		var state entity.LogState
 		entity.GetLogState(&state)

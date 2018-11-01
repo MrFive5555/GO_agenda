@@ -48,7 +48,7 @@ or just check those in a period if specify the start_time and the end_time`,
 			if !isvalid[i](registerArgs[i]) {
 				validArgs = false
 				fmt.Printf("[fail] the Field %s is invalid\n", info)
-				debugLog("[fail] the Field " + info + " is invalid")
+				debugLog("[fail] the Field %s is invalid\n", info)
 			}
 		}
 		if !validArgs {

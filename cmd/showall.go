@@ -16,8 +16,6 @@ package cmd
 
 import (
 	"fmt"
-	"strconv"
-	"strings"
 
 	"github.com/MrFive5555/GO_agenda/entity"
 	"github.com/spf13/cobra"
@@ -30,7 +28,7 @@ var showallCmd = &cobra.Command{
 	Long:  `show all the users who have registered before in agenda`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		debugLog("[command] showall " + strings.Join(args, " "))
+		debugLog("[command] showall")
 
 		// other argument
 		if len(args) > 0 {
@@ -51,7 +49,7 @@ var showallCmd = &cobra.Command{
 			fmt.Printf("[user %d]\n\tname:\t%s\n\temail:\t%s\n\ttel:\t%s\n", key+1, user.UserName, user.Email, user.Telephone)
 		}
 		fmt.Printf("[success] Done! A total of %d users have been shown\n", len(users))
-		debugLog("[success] Done! A total of " + strconv.Itoa(len(users)) + " users have been shown")
+		debugLog("[success] Done! A total of %d users have been shown\n", len(users))
 
 	},
 }

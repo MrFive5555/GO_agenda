@@ -29,7 +29,7 @@ var quitCmd = &cobra.Command{
 	Long:  `quit a meeting by specifying its title with -t`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		debugLog("[command] quit " + strings.Join(args, " "))
+		debugLog("[command] quit")
 
 		// other argument
 		if len(args) > 0 {
@@ -78,7 +78,7 @@ var quitCmd = &cobra.Command{
 						meetings[index].Participators = newParticipators[1:]
 						entity.SetMeeting(&meetings)
 						fmt.Printf("[success] delete participator %s from meeting %s\n", state.UserName, meeting.Title)
-						debugLog("[success] delete participator " + state.UserName + " from meeting " + meeting.Title)
+						debugLog("[success] delete participator %s from meeting %s\n", state.UserName, meeting.Title)
 					}
 				}
 			}

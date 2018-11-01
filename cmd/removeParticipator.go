@@ -39,7 +39,7 @@ you should specify the title and the new participators `,
 			if !isvalid[i](registerArgs[i]) {
 				validArgs = false
 				fmt.Printf("[fail] the Field %s is invalid\n", info)
-				debugLog("[fail] the Field " + info + " is invalid")
+				debugLog("[fail] the Field %s is invalid\n", info")
 			}
 		}
 		if !validArgs {
@@ -72,7 +72,7 @@ you should specify the title and the new participators `,
 		}
 		if !validMeeting {
 			fmt.Printf("[fail] %s does not have sponsored the meeting %s\n", me, title)
-			debugLog("[fail] " + me + " does not have sponsored the meeting " + title)
+			debugLog("[fail] %s does not have sponsored the meeting %s\n", me, title)
 			return
 		}
 
@@ -90,7 +90,7 @@ you should specify the title and the new participators `,
 			}
 			if !validParticipator {
 				fmt.Printf("[fail] participator %s does not exist\n", p)
-				debugLog("[fail] participator " + p + " does not exist")
+				debugLog("[fail] participator %s does not exist\n", p")
 				return
 			}
 		}
@@ -108,7 +108,7 @@ you should specify the title and the new participators `,
 						// delete meeting
 						toRemove[myMeeting] = true
 						fmt.Printf("[success] delete participator %s from meeting %s\n", mp, meetings[myMeeting].Title)
-						debugLog("[success] delete participator " + mp + " from meeting " + meetings[myMeeting].Title)
+						debugLog("[success] delete participator %s from meeting %s\n", mp, meetings[myMeeting].Title)
 						isParticipated = true
 						break
 					} else {
@@ -124,7 +124,7 @@ you should specify the title and the new participators `,
 						meetings[myMeeting].Participators = newParticipators[1:]
 						entity.SetMeeting(&meetings)
 						fmt.Printf("[success] delete participator %s from meeting %s\n", mp, meetings[myMeeting].Title)
-						debugLog("[success] delete participator " + mp + " from meeting " + meetings[myMeeting].Title)
+						debugLog("[success] delete participator %s from meeting %s\n", mp, meetings[myMeeting].Title)
 						isParticipated = true
 						break
 					}
@@ -132,7 +132,7 @@ you should specify the title and the new participators `,
 			}
 			if !isParticipated {
 				fmt.Printf("[fail] participator %s is not in the meeting %s\n", participator, meetings[myMeeting].Title)
-				debugLog("[fail] participator " + participator + " is not in the meeting " + meetings[myMeeting].Title)
+				debugLog("[fail] participator %s is not in the meeting %s\n", participator, meetings[myMeeting].Title)
 			}
 		}
 
