@@ -39,7 +39,7 @@ you should specify the title and the new participators `,
 			if !isvalid[i](registerArgs[i]) {
 				validArgs = false
 				fmt.Printf("[fail] the Field %s is invalid\n", info)
-				debugLog("[fail] the Field %s is invalid\n", info")
+				debugLog("[fail] the Field %s is invalid\n", info)
 			}
 		}
 		if !validArgs {
@@ -90,7 +90,7 @@ you should specify the title and the new participators `,
 			}
 			if !validParticipator {
 				fmt.Printf("[fail] participator %s does not exist\n", p)
-				debugLog("[fail] participator %s does not exist\n", p")
+				debugLog("[fail] participator %s does not exist\n", p)
 				return
 			}
 		}
