@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/MrFive5555/GO_agenda/entity"
 	"github.com/spf13/cobra"
 )
 
@@ -31,13 +32,13 @@ register when you aren't log in
 	Run: func(cmd *cobra.Command, args []string) {
 		debugLog("[command] logout " + strings.Join(args, " "))
 
-		var state LogState
-		GetLogState(&state)
+		var state entity.LogState
+		entity.GetLogState(&state)
 		if state.HasLogin {
 			fmt.Printf("[success] account (%s) has been logged out\n", state.UserName)
 			state.UserName = ""
 			state.HasLogin = false
-			SetLogState(&state)
+			entity.SetLogState(&state)
 		} else {
 			fmt.Printf("[fail] you haven't loged in\n")
 		}

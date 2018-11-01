@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/MrFive5555/GO_agenda/entity"
 	"github.com/spf13/cobra"
 )
 
@@ -37,8 +38,8 @@ var quitCmd = &cobra.Command{
 			return
 		}
 
-		var state LogState
-		GetLogState(&state)
+		var state entity.LogState
+		entity.GetLogState(&state)
 
 		if state.HasLogin == false {
 			fmt.Println("[fail] you haven't logged in any account")
@@ -48,8 +49,8 @@ var quitCmd = &cobra.Command{
 
 		// 以该用户为 参与者 的会议将从 参与者 列表中移除该用户
 		// 若因此造成会议 参与者 人数为0，则会议也将被删除。
-		var meetings MeetingList
-		GetMeeting(&meetings)
+		var meetings entity.MeetingList
+		entity.GetMeeting(&meetings)
 
 		isQuit := false
 		toRemove := make([]bool, len(meetings))
@@ -75,7 +76,7 @@ var quitCmd = &cobra.Command{
 						}
 						// remove the first commas
 						meetings[index].Participators = newParticipators[1:]
-						SetMeeting(&meetings)
+						entity.SetMeeting(&meetings)
 						fmt.Printf("[success] delete participator %s from meeting %s\n", state.UserName, meeting.Title)
 						debugLog("[success] delete participator " + state.UserName + " from meeting " + meeting.Title)
 					}

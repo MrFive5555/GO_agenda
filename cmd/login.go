@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/MrFive5555/GO_agenda/entity"
 	"github.com/spf13/cobra"
 )
 
@@ -30,21 +31,21 @@ to agenda`,
 	Run: func(cmd *cobra.Command, args []string) {
 		debugLog("[command] login -u %s -p ****** "+strings.Join(args, " "), username)
 
-		var users UserList
-		GetUsers(&users)
+		var users entity.UserList
+		entity.GetUsers(&users)
 
 		for _, user := range users {
 			if user.UserName == username {
 				if password == user.Password {
-					var state LogState
-					GetLogState(&state)
+					var state entity.LogState
+					entity.GetLogState(&state)
 					if state.HasLogin {
 						fmt.Printf("[fail] account (%s) has been logged in\n", state.UserName)
 						debugLog("[fail] account (%s) has been logged in\n", state.UserName)
 					} else {
 						state.UserName = username
 						state.HasLogin = true
-						SetLogState(&state)
+						entity.SetLogState(&state)
 						fmt.Printf("[success] Log in account (%s)\n", username)
 						debugLog("[success] Log in account (%s)\n", username)
 					}

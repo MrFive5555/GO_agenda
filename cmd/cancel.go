@@ -17,6 +17,7 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/MrFive5555/GO_agenda/entity"
 	"github.com/spf13/cobra"
 )
 
@@ -24,7 +25,7 @@ import (
 var cancelCmd = &cobra.Command{
 	Use:   "cancel",
 	Short: "cancel a meeting of your own",
-	Long: `specify the title and you will cancel the meeting you sponsor`,
+	Long:  `specify the title and you will cancel the meeting you sponsor`,
 
 	Run: func(cmd *cobra.Command, args []string) {
 
@@ -36,20 +37,20 @@ var cancelCmd = &cobra.Command{
 		}
 
 		// 获得当前登录用户信息
-		var state LogState
+		var state entity.LogState
 		var me string
-		GetLogState(&state)
+		entity.GetLogState(&state)
 		if state.HasLogin {
 			me = state.UserName
 		} else {
 			fmt.Printf("[fail] you haven't loged in\n")
 			debugLog("[fail] you haven't logged in")
-			return 
+			return
 		}
 
 		// 检查自己发起的主题为title的会议是否存在，并获取该会议信息
-		var meetings MeetingList
-		GetMeeting(&meetings)
+		var meetings entity.MeetingList
+		entity.GetMeeting(&meetings)
 		toRemove := make([]bool, len(meetings))
 		validMeeting := false
 		for i, m := range meetings {
@@ -65,7 +66,7 @@ var cancelCmd = &cobra.Command{
 			return
 		}
 		deleteMeeting(toRemove)
-		
+
 	},
 }
 

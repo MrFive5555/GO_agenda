@@ -19,6 +19,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/MrFive5555/GO_agenda/entity"
 	"github.com/spf13/cobra"
 )
 
@@ -40,7 +41,7 @@ you should specify the title and the new participators `,
 			if !isvalid[i](registerArgs[i]) {
 				validArgs = false
 				fmt.Printf("[fail] the Field %s is invalid\n", info)
-				debugLog("[fail] the Field " + info +" is invalid")
+				debugLog("[fail] the Field " + info + " is invalid")
 			}
 		}
 		if !validArgs {
@@ -48,21 +49,21 @@ you should specify the title and the new participators `,
 		}
 
 		// 获得当前登录用户信息
-		var state LogState
+		var state entity.LogState
 		var me string
-		GetLogState(&state)
+		entity.GetLogState(&state)
 		if state.HasLogin {
 			me = state.UserName
 		} else {
 			fmt.Printf("[fail] you haven't loged in\n")
 			debugLog("[fail] you haven't logged in")
-			return 
+			return
 		}
 
 		// 检查自己发起的主题为title的会议是否存在，并获取该会议信息
-		var meetings MeetingList
-		GetMeeting(&meetings)
-		var myMeeting Meeting
+		var meetings entity.MeetingList
+		entity.GetMeeting(&meetings)
+		var myMeeting entity.Meeting
 		validMeeting := false
 		for _, m := range meetings {
 			if (m.Title == title) && (m.Sponsors == me) {
@@ -78,8 +79,8 @@ you should specify the title and the new participators `,
 		}
 
 		// 检查用户是否已注册
-		var users UserList
-		GetUsers(&users)
+		var users entity.UserList
+		entity.GetUsers(&users)
 		participatorsList := strings.Split(participators, ",")
 		for _, p := range participatorsList {
 			validParticipator := false
@@ -113,14 +114,14 @@ you should specify the title and the new participators `,
 				if !((mEnd.Before(startTime) || mEnd.Equal(startTime)) || (mStart.After(endTime) || mStart.Equal(endTime))) {
 					if meeting.Sponsors == participator {
 						fmt.Printf("[fail] participator %s is a busy sponsor in another meeting (%s)\n", participator, meeting.Title)
-						debugLog("[fail] participator " + participator + " is a busy sponsor in another meeting (" + meeting.Title +")")
+						debugLog("[fail] participator " + participator + " is a busy sponsor in another meeting (" + meeting.Title + ")")
 						return
 					}
 					mParticipatorsList := strings.Split(meeting.Participators, ",")
 					for _, mParticipator := range mParticipatorsList {
 						if mParticipator == participator {
 							fmt.Printf("[fail] participator %s is a busy participator in another meeting (%s)\n", participator, meeting.Title)
-							debugLog("[fail] participator " + participator + " is a busy participator in another meeting (" + meeting.Title +")")
+							debugLog("[fail] participator " + participator + " is a busy participator in another meeting (" + meeting.Title + ")")
 							return
 						}
 					}
@@ -131,12 +132,12 @@ you should specify the title and the new participators `,
 		// 如无错误，增加会议参与者
 		for i, m := range meetings {
 			if m.Title == title {
-				meetings[i].Participators += "," 
+				meetings[i].Participators += ","
 				meetings[i].Participators += participators
 				break
 			}
 		}
-		SetMeeting(&meetings)
+		entity.SetMeeting(&meetings)
 		fmt.Printf("[success] new participator(s) %s has(have) been added into the %s\n", participators, title)
 		debugLog("[success] new participator(s) " + participators + " has(have) been added into the " + title)
 	},

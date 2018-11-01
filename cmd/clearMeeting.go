@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/MrFive5555/GO_agenda/entity"
 	"github.com/spf13/cobra"
 )
 
@@ -37,8 +38,8 @@ var clearMeetingCmd = &cobra.Command{
 			return
 		}
 
-		var state LogState
-		GetLogState(&state)
+		var state entity.LogState
+		entity.GetLogState(&state)
 
 		if state.HasLogin == false {
 			fmt.Println("[fail] you haven't logged in any account")
@@ -47,8 +48,8 @@ var clearMeetingCmd = &cobra.Command{
 		}
 
 		// 以该用户为 发起者 的会议将被删除
-		var meetings MeetingList
-		GetMeeting(&meetings)
+		var meetings entity.MeetingList
+		entity.GetMeeting(&meetings)
 
 		flag := false
 		toRemove := make([]bool, len(meetings))

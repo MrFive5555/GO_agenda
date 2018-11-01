@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/MrFive5555/GO_agenda/entity"
 	"github.com/spf13/cobra"
 )
 
@@ -38,7 +39,7 @@ you should specify the title and the new participators `,
 			if !isvalid[i](registerArgs[i]) {
 				validArgs = false
 				fmt.Printf("[fail] the Field %s is invalid\n", info)
-				debugLog("[fail] the Field " + info +" is invalid")
+				debugLog("[fail] the Field " + info + " is invalid")
 			}
 		}
 		if !validArgs {
@@ -46,20 +47,20 @@ you should specify the title and the new participators `,
 		}
 
 		// 获得当前登录用户信息
-		var state LogState
+		var state entity.LogState
 		var me string
-		GetLogState(&state)
+		entity.GetLogState(&state)
 		if state.HasLogin {
 			me = state.UserName
 		} else {
 			fmt.Printf("[fail] you haven't loged in\n")
 			debugLog("[fail] you haven't logged in")
-			return 
+			return
 		}
 
 		// 检查自己发起的主题为title的会议是否存在，并获取该会议信息
-		var meetings MeetingList
-		GetMeeting(&meetings)
+		var meetings entity.MeetingList
+		entity.GetMeeting(&meetings)
 		var myMeeting int
 		validMeeting := false
 		for i, m := range meetings {
@@ -76,8 +77,8 @@ you should specify the title and the new participators `,
 		}
 
 		// 检查用户是否已注册
-		var users UserList
-		GetUsers(&users)
+		var users entity.UserList
+		entity.GetUsers(&users)
 		participatorsList := strings.Split(participators, ",")
 		for _, p := range participatorsList {
 			validParticipator := false
@@ -94,9 +95,9 @@ you should specify the title and the new participators `,
 			}
 		}
 
-		// 删除会议参与者，人数为0则删除会议	
+		// 删除会议参与者，人数为0则删除会议
 
-		toRemove := make([]bool, len(meetings))		
+		toRemove := make([]bool, len(meetings))
 		for _, participator := range participatorsList {
 			meetingParticipators := meetings[myMeeting].Participators
 			mpList := strings.Split(meetingParticipators, ",")
@@ -121,7 +122,7 @@ you should specify the title and the new participators `,
 						}
 						// remove the first commas
 						meetings[myMeeting].Participators = newParticipators[1:]
-						SetMeeting(&meetings)
+						entity.SetMeeting(&meetings)
 						fmt.Printf("[success] delete participator %s from meeting %s\n", mp, meetings[myMeeting].Title)
 						debugLog("[success] delete participator " + mp + " from meeting " + meetings[myMeeting].Title)
 						isParticipated = true

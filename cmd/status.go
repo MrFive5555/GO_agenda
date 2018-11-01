@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/MrFive5555/GO_agenda/entity"
 	"github.com/spf13/cobra"
 )
 
@@ -30,8 +31,8 @@ namely whether the account has logged in`,
 	Run: func(cmd *cobra.Command, args []string) {
 		debugLog("[command] status " + strings.Join(args, " "))
 
-		var state LogState
-		GetLogState(&state)
+		var state entity.LogState
+		entity.GetLogState(&state)
 
 		if state.HasLogin {
 			fmt.Printf("[%s] has logged in\n", state.UserName)

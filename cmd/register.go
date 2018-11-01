@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/MrFive5555/GO_agenda/entity"
 	"github.com/spf13/cobra"
 )
 
@@ -48,8 +49,8 @@ you should specify the username, password, email and telephone
 		}
 
 		// 检查是否重名
-		var users UserList
-		GetUsers(&users)
+		var users entity.UserList
+		entity.GetUsers(&users)
 		for _, user := range users {
 			if user.UserName == username {
 				fmt.Printf("[fail] there has been account named %s\n", username)
@@ -57,13 +58,13 @@ you should specify the username, password, email and telephone
 				return
 			}
 		}
-		users = append(users, User{
+		users = append(users, entity.User{
 			username,
 			password,
 			email,
 			telephone,
 		})
-		SetUsers(&users)
+		entity.SetUsers(&users)
 		fmt.Printf("[success] new account %s has been added\n", username)
 		debugLog("[success] new account %s has been added\n", username)
 	},

@@ -19,6 +19,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/MrFive5555/GO_agenda/entity"
 	"github.com/spf13/cobra"
 )
 
@@ -38,8 +39,8 @@ var showallCmd = &cobra.Command{
 			return
 		}
 
-		var users UserList
-		GetUsers(&users)
+		var users entity.UserList
+		entity.GetUsers(&users)
 
 		if len(users) <= 0 {
 			fmt.Println("[success] There is no user in agenda, please register first")

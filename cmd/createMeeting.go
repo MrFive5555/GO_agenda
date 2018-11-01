@@ -19,6 +19,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/MrFive5555/GO_agenda/entity"
 	"github.com/spf13/cobra"
 )
 
@@ -39,8 +40,8 @@ var createMeetingCmd = &cobra.Command{
 			return
 		}
 
-		var state LogState
-		GetLogState(&state)
+		var state entity.LogState
+		entity.GetLogState(&state)
 
 		if state.HasLogin == false {
 			fmt.Println("[fail] you haven't logged in any account")
@@ -85,8 +86,8 @@ var createMeetingCmd = &cobra.Command{
 		}
 
 		// 检查是否重名
-		var meetings MeetingList
-		GetMeeting(&meetings)
+		var meetings entity.MeetingList
+		entity.GetMeeting(&meetings)
 		for _, meeting := range meetings {
 			if meeting.Title == title {
 				fmt.Printf("[fail] there has been a meeting with the same title %s\n", title)
@@ -96,8 +97,8 @@ var createMeetingCmd = &cobra.Command{
 		}
 
 		// 不允许包含未注册用户
-		var users UserList
-		GetUsers(&users)
+		var users entity.UserList
+		entity.GetUsers(&users)
 		for _, participator := range participatorsList {
 			exist := false
 			for _, user := range users {
@@ -140,14 +141,14 @@ var createMeetingCmd = &cobra.Command{
 			}
 		}
 
-		meetings = append(meetings, Meeting{
+		meetings = append(meetings, entity.Meeting{
 			title,
 			state.UserName,
 			participators,
 			start,
 			end,
 		})
-		SetMeeting(&meetings)
+		entity.SetMeeting(&meetings)
 		fmt.Printf("[success] new meeting %s has been added\n", title)
 		debugLog("[success] new meeting " + title + " has been added")
 

@@ -1,11 +1,9 @@
 // load the status of agenda
-package cmd
+package entity
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 )
 
@@ -23,14 +21,6 @@ type User struct {
 	Telephone string `json:"telephone"`
 }
 
-// type Time struct {
-// 	Year  int `json:"Year"`
-// 	Mouth int `json:"Mouth"`
-// 	Day   int `json:"Day"`
-// 	Hour  int `json:"Hour"`
-// 	Min   int `json:"Min"`
-// }
-
 type Meeting struct {
 	Title         string `json:"Title"`
 	Sponsors      string `json:"Sponsors"`
@@ -46,12 +36,6 @@ type LogState struct {
 	HasLogin bool   `json:"HasLogin"`
 	UserName string `json:"UserName"`
 }
-
-var username, password, email, telephone string
-var title, sponsor, participators, start, end string
-var quitTitle string
-
-const layout string = "2006-01-02 15:04:05"
 
 func GetUsers(usersPtr *UserList) error {
 	return loadJSON(USER_JSON, usersPtr)
@@ -95,23 +79,6 @@ func saveJSON(file string, dataPtr interface{}) error {
 	return nil
 }
 
-func deleteMeeting(toRemove []bool) {
-	var meetings MeetingList
-	GetMeeting(&meetings)
-	var newMeetings MeetingList
-	for i := 0; i < len(meetings); i++ {
-		if toRemove[i] {
-			fmt.Printf("[success] delete meeting %s\n", meetings[i].Title)
-			debugLog("[success] delete meeting " + meetings[i].Title)
-		} else {
-			newMeetings = append(newMeetings, meetings[i])
-		}
-	}
-	SetMeeting(&newMeetings)
-}
-
-var debugLog func(format string, arg ...interface{})
-
 func init() {
 	os.Mkdir(CACHE_DIR, 0775)
 	checkCache := func(name string, default_context string) {
@@ -123,18 +90,4 @@ func init() {
 	checkCache(USER_JSON, "{}")
 	checkCache(MEETING_JSON, "{}")
 	checkCache(LOG_JSON, `{"HasLogin":false,"UserName":""}`)
-
-	debugLog = (func() func(string, ...interface{}) {
-		logfile, err := os.OpenFile("./log.txt", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0777)
-		if err != nil {
-			fmt.Println(err.Error())
-			os.Exit(3)
-		}
-		debugLogger := log.New(logfile, "[debug]", log.LstdFlags)
-
-		return func(format string, arg ...interface{}) {
-			str := fmt.Sprintf(format, arg...)
-			debugLogger.Println(str)
-		}
-	})()
 }

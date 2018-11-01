@@ -19,6 +19,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/MrFive5555/GO_agenda/entity"
 	"github.com/spf13/cobra"
 )
 
@@ -29,7 +30,7 @@ var checkCmd = &cobra.Command{
 	Long: `you can check all meetings that you participate in, 
 or just check those in a period if specify the start_time and the end_time`,
 	Run: func(cmd *cobra.Command, args []string) {
-	
+
 		// 检查参数
 		if start == "" {
 			start = "0000-01-01-00-00"
@@ -47,7 +48,7 @@ or just check those in a period if specify the start_time and the end_time`,
 			if !isvalid[i](registerArgs[i]) {
 				validArgs = false
 				fmt.Printf("[fail] the Field %s is invalid\n", info)
-				debugLog("[fail] the Field " + info +" is invalid")
+				debugLog("[fail] the Field " + info + " is invalid")
 			}
 		}
 		if !validArgs {
@@ -55,38 +56,38 @@ or just check those in a period if specify the start_time and the end_time`,
 		}
 
 		// 获得当前登录用户信息
-		var state LogState
+		var state entity.LogState
 		var me string
-		GetLogState(&state)
+		entity.GetLogState(&state)
 		if state.HasLogin {
 			me = state.UserName
 		} else {
 			fmt.Printf("[fail] you haven't loged in\n")
 			debugLog("[fail] you haven't logged in")
-			return 
+			return
 		}
 
 		startTime, _ := time.Parse(layout, startFormat)
 		endTime, _ := time.Parse(layout, endFormat)
-		var meetings MeetingList
-		var myMeetings MeetingList
-		GetMeeting(&meetings)
+		var meetings entity.MeetingList
+		var myMeetings entity.MeetingList
+		entity.GetMeeting(&meetings)
 		for _, meeting := range meetings {
 			mStartFormat := timeFormation(meeting.Start)
 			mEndFormat := timeFormation(meeting.End)
 			mStart, _ := time.Parse(layout, mStartFormat)
 			mEnd, _ := time.Parse(layout, mEndFormat)
-			if !( mEnd.Before(startTime) || mStart.After(endTime) ) {
+			if !(mEnd.Before(startTime) || mStart.After(endTime)) {
 				if meeting.Sponsors == me {
-					myMeetings = append(myMeetings,meeting)
+					myMeetings = append(myMeetings, meeting)
 				}
 				mParticipatorsList := strings.Split(meeting.Participators, ",")
 				for _, mParticipator := range mParticipatorsList {
 					if mParticipator == me {
-						myMeetings = append(myMeetings,meeting)
+						myMeetings = append(myMeetings, meeting)
 					}
 				}
-			}			
+			}
 		}
 
 		for key, meeting := range myMeetings {

@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/MrFive5555/GO_agenda/entity"
 	"github.com/spf13/cobra"
 )
 
@@ -39,11 +40,11 @@ var deleteAccountCmd = &cobra.Command{
 			return
 		}
 
-		var users UserList
-		GetUsers(&users)
+		var users entity.UserList
+		entity.GetUsers(&users)
 
-		var state LogState
-		GetLogState(&state)
+		var state entity.LogState
+		entity.GetLogState(&state)
 
 		if state.HasLogin == false {
 			fmt.Println("[fail] you haven't logged in any account")
@@ -52,26 +53,26 @@ var deleteAccountCmd = &cobra.Command{
 		}
 
 		// 已登录的用户可以删除本用户账户（即销号）
-		var newUsers UserList
+		var newUsers entity.UserList
 		for _, user := range users {
 			if user.UserName == state.UserName {
 				continue
 			}
-			newUsers = append(newUsers, User{
+			newUsers = append(newUsers, entity.User{
 				user.UserName,
 				user.Password,
 				user.Email,
 				user.Telephone,
 			})
 		}
-		SetUsers(&newUsers)
+		entity.SetUsers(&newUsers)
 
 		// 用户账户删除以后：
 		// 以该用户为 发起者 的会议将被删除
 		// 以该用户为 参与者 的会议将从 参与者 列表中移除该用户
 		// 若因此造成会议 参与者 人数为0，则会议也将被删除。
-		var meetings MeetingList
-		GetMeeting(&meetings)
+		var meetings entity.MeetingList
+		entity.GetMeeting(&meetings)
 
 		toRemove := make([]bool, len(meetings))
 		for index, meeting := range meetings {
@@ -96,7 +97,7 @@ var deleteAccountCmd = &cobra.Command{
 						}
 						// remove the first commas
 						meetings[index].Participators = newParticipators[1:]
-						SetMeeting(&meetings)
+						entity.SetMeeting(&meetings)
 						fmt.Printf("[success] delete participator %s from meeting %s\n", state.UserName, meeting.Title)
 						debugLog("[success] delete participator " + state.UserName + " from meeting " + meeting.Title)
 					}
@@ -112,7 +113,7 @@ var deleteAccountCmd = &cobra.Command{
 		// 删除成功则退出系统登录状态。删除后，该用户账户不再存在。
 		state.UserName = ""
 		state.HasLogin = false
-		SetLogState(&state)
+		entity.SetLogState(&state)
 
 	},
 }
